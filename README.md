@@ -4,7 +4,8 @@ It also includes an interactive SQL interface using SQLite.
 
 # installation instructions
 1. Download/Clone repository
-2. Install Pandas (run pip install pandas)
+2. Add .csv files to project folder
+3. Install Pandas (run pip install pandas)
 
 # usage instructions
 1. Run the program
