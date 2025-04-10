@@ -256,6 +256,7 @@ def main():
     for i, rel in enumerate(relations, 1):
         print(f"Relation {i}: {rel}")
 
+    # Step 4: Generate sql script
     print("\nGenerating SQL Scripts...")
     generate_sql(relations, df)
 
