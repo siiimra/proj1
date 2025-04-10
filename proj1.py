@@ -1,4 +1,11 @@
+# Simra Ahmed
+# CMPS664 Project 1
+# This script reads in a dataset, checks normal forms, and performs BCNF decomposition.
+# It generates SQL scripts and creates a SQLite DB with an interactive shell.
+
 import pandas as pd
+import sqlite3
+
 
 # Step 1: CSV Import
 def import_csv():
@@ -123,6 +130,81 @@ def decompose_bcnf(relation_attrs, fds):
     bcnf_decompose(relation_attrs)
     return decomposed_relations
 
+def generate_sql(relations, df, output_file="normalized_output.sql"):
+    sql_statements = []
+
+    for i, attrs in enumerate(relations, start=1):
+        table_name = f"Relation_{i}"
+        columns_sql = []
+        for attr in attrs:
+            dtype = df[attr].dtype
+            if pd.api.types.is_integer_dtype(dtype):
+                col_type = "INT"
+            elif pd.api.types.is_float_dtype(dtype):
+                col_type = "FLOAT"
+            else:
+                col_type = "VARCHAR(255)"
+            columns_sql.append(f"{attr} {col_type}")
+        
+        create_stmt = f"CREATE TABLE IF NOT EXISTS {table_name} (\n  " + ",\n  ".join(columns_sql) + "\n);"
+        sql_statements.append(create_stmt)
+
+        sub_df = df[attrs].drop_duplicates()
+        for _, row in sub_df.iterrows():
+            values = []
+            for val in row:
+                if pd.isna(val):
+                    values.append("NULL")
+                elif isinstance(val, str):
+                    values.append(f"'{val.replace('\'', '\'\'')}'")
+                else:
+                    values.append(str(val))
+            insert_stmt = f"INSERT INTO {table_name} VALUES (" + ", ".join(values) + ");"
+            sql_statements.append(insert_stmt)
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write("\n\n".join(sql_statements))
+
+    print(f"\nSQL script saved as '{output_file}'.")
+
+# Step 5: Create DB and Interactive SQL Interface
+def db_setup(sql_file, db_name="normalized.db"):
+    try:
+        conn = sqlite3.connect(db_name)
+        cursor = conn.cursor()
+
+        with open(sql_file, "r", encoding="utf-8") as f:
+            sql_script = f.read()
+
+        cursor.executescript(sql_script)
+        conn.commit()
+        print(f"\nDatabase '{db_name}' created and populated.")
+        return conn
+    except Exception as e:
+        print("Error setting up database:", e)
+        return None
+
+def interface(conn):
+    cursor = conn.cursor()
+    print("\nInteractive SQL Console")
+    print("Type 'exit' to quit.\n")
+    
+    while True:
+        query = input("SQL> ")
+        if query.strip().lower() == "exit":
+            break
+        try:
+            cursor.execute(query)
+            if query.strip().lower().startswith("select"):
+                rows = cursor.fetchall()
+                for row in rows:
+                    print(row)
+            else:
+                conn.commit()
+                print("Query executed.")
+        except Exception as e:
+            print("Error:", e)
+
 # Main Execution
 def main():
     df = import_csv()
@@ -173,6 +255,15 @@ def main():
     relations = decompose_bcnf(df.columns.tolist(), fds)
     for i, rel in enumerate(relations, 1):
         print(f"Relation {i}: {rel}")
+
+    print("\nGenerating SQL Scripts...")
+    generate_sql(relations, df)
+
+    # Step 5: Create Database and Run Interactive Console
+    conn = db_setup("normalized_output.sql")
+    if conn:
+        interface(conn)
+        conn.close()
 
 
 
