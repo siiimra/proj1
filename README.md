@@ -22,4 +22,4 @@ It also includes an interactive SQL interface using SQLite.
 2. Primary Key's: StudentID,CourseID
 3. Example Queries:
    - SELECT * FROM Relation_1
-   - INSERT INTO Relation_1 (CourseID, CourseName, Instructor) VALUES ('CSE104', 'Databases', 'Dr. Lin');
+   - INSERT INTO Relation_1 (CourseID, CourseName, Instructor) VALUES ('CSE109', 'Design', 'Dr. Smith');
