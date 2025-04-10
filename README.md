@@ -3,12 +3,14 @@ It performs BCNF decomposition and generates an SQL script to create normalized 
 It also includes an interactive SQL interface using SQLite.
 
 # installation instructions
-1. Download/Clone repository
-2. Add .csv files to project folder
-3. Install Pandas (run pip install pandas)
+1. Download/Clone repository & Install pandas
+   - git clone https://github.com/siiimra/proj1.git
+   - cd proj1
+   - pip install pandas
+3. Add desired .csv files to the project folder or use enrollment.csv to test
 
 # usage instructions
-1. Run the program
+1. Run the program (python proj1.py)
 2. Enter the CSV file path (.csv file name)
 3. Provide functional dependencies (e.g. A,B->C;D->E)
 4. Provide the primary key(s) (e.g. A,B)
