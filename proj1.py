@@ -156,10 +156,11 @@ def generate_sql(relations, df, output_file="normalized_output.sql"):
                 if pd.isna(val):
                     values.append("NULL")
                 elif isinstance(val, str):
-                    values.append(f"'{val.replace('\'', '\'\'')}'")
+                    values.append("'" + str(val).replace("'", "''") + "'")
                 else:
                     values.append(str(val))
-            insert_stmt = f"INSERT INTO {table_name} VALUES (" + ", ".join(values) + ");"
+            columns_str = ", ".join(attrs)
+            insert_stmt = f"INSERT INTO {table_name} ({columns_str}) VALUES (" + ", ".join(values) + ");"
             sql_statements.append(insert_stmt)
 
     with open(output_file, "w", encoding="utf-8") as f:
