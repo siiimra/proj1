@@ -1,5 +1,0 @@
-StudentID,CourseID,StudentName,CourseName,Instructor
-1,CSE101,Alice,Intro to CS,Dr. Smith
-2,CSE102,Bob,Data Structures,Dr. Lee
-3,CSE101,Charlie,Intro to CS,Dr. Smith
-4,CSE103,David,Algorithms,Dr. Wang
