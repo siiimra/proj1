@@ -16,10 +16,3 @@ It also includes an interactive SQL interface using SQLite.
 4. Provide the primary key(s) (e.g. A,B)
 5. Write queries as desired
 [CMPS664_Project#1.pdf](https://github.com/user-attachments/files/19677097/CMPS664_Project.1.pdf)
-
-# example file (enrollment.csv)
-1. FD's: StudentID,CourseID -> StudentName,CourseName,Instructor; CourseID -> CourseName,Instructor; StudentID -> StudentName  
-2. Primary Key's: StudentID,CourseID
-3. Example Queries:
-   - SELECT * FROM Relation_1
-   - INSERT INTO Relation_1 (CourseID, CourseName, Instructor) VALUES ('CSE109', 'Design', 'Dr. Smith');
